@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Map;
@@ -43,10 +44,13 @@ public class SpringbootJenkinsApplication {
         // Store the mapping.
         urlStore.put(shortCode, longUrl);
 
-        // Construct the full short URL to return to the user.
-        String shortUrl = "http://localhost:8080/" + shortCode;
+        String shortUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()  // e.g., http://localhost:9090
+                .path("/")
+                .path(shortCode)
+                .toUriString();
 
-        return ResponseEntity.ok(shortUrl);
+        return ResponseEntity.ok(shortUrl+"\n");
     }
 
     /**
